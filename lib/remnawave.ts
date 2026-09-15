@@ -2,27 +2,31 @@
  * Клиент Remnawave API. Все секреты и вызовы — только на сервере,
  * фронтенд никогда не видит REMNAWAVE_API_TOKEN.
  *
- * Схема подтверждена вручную против реальной панели (panel.dragonvpn.online,
- * 2026-08-29) — не полагаемся на типовую документацию Remnawave, там были
+ * Схема подтверждена вручную против реальной панели (panel.peak-tech.online,
+ * 2026-09-15) — не полагаемся на типовую документацию Remnawave, там были
  * расхождения. Ключевые нюансы:
  *  - Все ответы обёрнуты в `{ "response": ... }`.
+ *  - У пользователя нет поля `uuid` — он адресуется числовым `id`
+ *    (GET /api/users/{id}); старые панели с uuid этим клиентом не поддерживаются.
  *  - Отдельного эндпоинта подписки нет — все данные (status/expireAt/
  *    трафик/subscriptionUrl) лежат прямо на объекте пользователя.
  *  - Создание пользователя требует expireAt/trafficLimitBytes/
  *    trafficLimitStrategy и явного назначения squad (иначе доступа к
  *    серверам не будет вообще — "пользователь есть, VPN не работает").
- *  - Продление — PATCH /api/users (uuid передаётся в теле, не в пути).
+ *  - Продление — PATCH /api/users, `id` передаётся в теле, не в пути.
+ *  - Ненайденный пользователь — 404 (errorCode A063).
+ *
+ * В БД сайта id панели хранится строкой в User.remnawaveUuid (имя поля
+ * историческое, схему не трогаем).
  */
 
 const BASE_URL = process.env.REMNAWAVE_API_URL
 const API_TOKEN = process.env.REMNAWAVE_API_TOKEN
-// UUID squad'а, в который попадают все платные пользователи сайта — тот же,
-// что использует существующий Telegram-бот ("Users"), чтобы у них был доступ
-// к тем же нодам. Посмотреть/сменить: GET /api/internal-squads в панели.
+// UUID squad'а, в который попадают все платные пользователи сайта.
+// Посмотреть/сменить: GET /api/internal-squads в панели.
 const SQUAD_UUID = process.env.REMNAWAVE_SQUAD_UUID
 
-// Стандартный пакет для платных тарифов сайта — совпадает с тем, что уже
-// выдаёт существующий бот (200 GiB, сброс раз в месяц).
+// Стандартный пакет для платных тарифов сайта (200 GiB, сброс раз в месяц).
 const DEFAULT_TRAFFIC_LIMIT_BYTES = 200 * 1024 * 1024 * 1024
 const DEFAULT_TRAFFIC_STRATEGY = "MONTH"
 
@@ -31,6 +35,8 @@ function assertConfigured() {
     throw new Error("Remnawave is not configured (REMNAWAVE_API_URL / REMNAWAVE_API_TOKEN)")
   }
 }
+
+class RemnawaveNotFoundError extends Error {}
 
 async function rw<T>(path: string, init?: RequestInit): Promise<T> {
   assertConfigured()
@@ -45,14 +51,16 @@ async function rw<T>(path: string, init?: RequestInit): Promise<T> {
   })
   if (!res.ok) {
     const body = await res.text().catch(() => "")
-    throw new Error(`Remnawave API ${path} -> ${res.status}: ${body}`)
+    const message = `Remnawave API ${path} -> ${res.status}: ${body}`
+    throw res.status === 404 ? new RemnawaveNotFoundError(message) : new Error(message)
   }
   const json = await res.json()
   return json.response as T
 }
 
 type RemnawaveUser = {
-  uuid: string
+  id: number
+  username: string
   status: "ACTIVE" | "DISABLED" | "LIMITED" | "EXPIRED"
   expireAt: string
   trafficLimitBytes: number
@@ -84,28 +92,50 @@ function toSubscription(user: RemnawaveUser): RemnawaveSubscription {
   }
 }
 
-// Remnawave принимает в username только [A-Za-z0-9_-]. Существующий
-// Telegram-бот, который делит с сайтом эту же панель/squad ("Users"),
-// называет своих пользователей "user_<telegram_id>" — используем тот же
-// стиль с префиксом "site_", чтобы в общем списке панели было сразу видно
-// источник, а по цифрам телефона пользователя можно было найти поиском
-// (телефон уже нормализован как +7XXXXXXXXXX, см. lib/phone.ts).
+/** id панели хранится строкой — приводим к числу и падаем с понятной причиной,
+ *  если в БД осталась ссылка старого формата (uuid от прежней панели). */
+function toPanelId(storedId: string): number {
+  const id = Number(storedId)
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new Error(`Remnawave: некорректный id пользователя панели "${storedId}" (ожидается число)`)
+  }
+  return id
+}
+
+// Remnawave принимает в username только [A-Za-z0-9_-]. Префикс "site_" —
+// чтобы в общем списке панели было сразу видно источник, а по цифрам телефона
+// пользователя можно было найти поиском (телефон нормализован как +7XXXXXXXXXX,
+// см. lib/phone.ts).
 function buildRemnawaveUsername(phone: string): string {
   return `site_${phone.replace(/\D/g, "")}`
 }
 
-/** Находит пользователя Remnawave по externalId (используем userId сайта), либо создаёт нового. */
+/**
+ * Находит пользователя панели по username (site_<телефон>), либо создаёт нового.
+ * Поиск нужен для идемпотентности: если прошлая попытка выдачи создала
+ * пользователя, но упала до сохранения id в БД, повторная не должна
+ * упереться в занятый username.
+ */
 export async function ensureRemnawaveUser(params: {
   externalId: string
   phone: string
-}): Promise<{ uuid: string }> {
+}): Promise<{ id: string }> {
   if (!SQUAD_UUID) {
     throw new Error("Remnawave squad is not configured (REMNAWAVE_SQUAD_UUID)")
   }
+  const username = buildRemnawaveUsername(params.phone)
+
+  try {
+    const existing = await rw<RemnawaveUser>(`/api/users/by-username/${encodeURIComponent(username)}`)
+    return { id: String(existing.id) }
+  } catch (err) {
+    if (!(err instanceof RemnawaveNotFoundError)) throw err
+  }
+
   const created = await rw<RemnawaveUser>("/api/users", {
     method: "POST",
     body: JSON.stringify({
-      username: buildRemnawaveUsername(params.phone),
+      username,
       // Новый пользователь стартует "истёкшим" — extendRemnawaveSubscription
       // сразу после этого вызова продлевает его на купленный срок.
       expireAt: new Date().toISOString(),
@@ -115,14 +145,14 @@ export async function ensureRemnawaveUser(params: {
       // externalId (id пользователя в БД сайта) оставляем в описании — если
       // username когда-нибудь разъедется с телефоном (смена номера и т.п.),
       // по этому id всё равно можно найти запись в БД сайта для саппорта.
-      description: `Dragon VPN (сайт) · ${params.phone} · site_id:${params.externalId}`,
+      description: `PEAK (сайт) · ${params.phone} · site_id:${params.externalId}`,
     }),
   })
-  return { uuid: created.uuid }
+  return { id: String(created.id) }
 }
 
-export async function getRemnawaveSubscription(uuid: string): Promise<RemnawaveSubscription> {
-  const user = await rw<RemnawaveUser>(`/api/users/${uuid}`)
+export async function getRemnawaveSubscription(storedId: string): Promise<RemnawaveSubscription> {
+  const user = await rw<RemnawaveUser>(`/api/users/${toPanelId(storedId)}`)
   return toSubscription(user)
 }
 
@@ -138,8 +168,9 @@ function assertValidDate(date: Date, context: string): void {
 }
 
 /** Продлевает подписку пользователя на N месяцев + N дней (используется и для первой активации). */
-export async function extendRemnawaveSubscription(uuid: string, duration: SubscriptionDuration): Promise<void> {
-  const current = await rw<RemnawaveUser>(`/api/users/${uuid}`)
+export async function extendRemnawaveSubscription(storedId: string, duration: SubscriptionDuration): Promise<void> {
+  const id = toPanelId(storedId)
+  const current = await rw<RemnawaveUser>(`/api/users/${id}`)
   const currentExpireAt = new Date(current.expireAt)
   assertValidDate(currentExpireAt, `user.expireAt="${current.expireAt}"`)
   const base = currentExpireAt > new Date() ? currentExpireAt : new Date()
@@ -150,15 +181,16 @@ export async function extendRemnawaveSubscription(uuid: string, duration: Subscr
 
   await rw("/api/users", {
     method: "PATCH",
-    body: JSON.stringify({ uuid, expireAt: nextExpireAt.toISOString() }),
+    body: JSON.stringify({ id, expireAt: nextExpireAt.toISOString() }),
   })
 }
 
 /** Возврат средств за оплату — урезает подписку ровно на длительность этого
  *  конкретного платежа, не больше. Если expireAt уходит в прошлое — это
  *  нормально, Remnawave просто отдаст статус EXPIRED. */
-export async function reduceRemnawaveSubscription(uuid: string, duration: SubscriptionDuration): Promise<void> {
-  const current = await rw<RemnawaveUser>(`/api/users/${uuid}`)
+export async function reduceRemnawaveSubscription(storedId: string, duration: SubscriptionDuration): Promise<void> {
+  const id = toPanelId(storedId)
+  const current = await rw<RemnawaveUser>(`/api/users/${id}`)
   const nextExpireAt = new Date(current.expireAt)
   assertValidDate(nextExpireAt, `user.expireAt="${current.expireAt}"`)
   nextExpireAt.setMonth(nextExpireAt.getMonth() - duration.months)
@@ -167,7 +199,7 @@ export async function reduceRemnawaveSubscription(uuid: string, duration: Subscr
 
   await rw("/api/users", {
     method: "PATCH",
-    body: JSON.stringify({ uuid, expireAt: nextExpireAt.toISOString() }),
+    body: JSON.stringify({ id, expireAt: nextExpireAt.toISOString() }),
   })
 }
 

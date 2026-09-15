@@ -3,12 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Личный кабинет — Dragon VPN</title>
+<title>Личный кабинет — PEAK</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050505">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&family=Great+Vibes&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="icon" type="image/png" href="/icon-dark-32x32.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-dark-32x32.png">
 <link rel="apple-touch-icon" href="/apple-icon.png">
 <!-- QR-код: библиотека qrcode.js через CDN -->
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU" crossorigin="anonymous"></script>
@@ -18,14 +20,13 @@
 </head>
 <body class="is-loading">
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
+<div class="bg-topo" aria-hidden="true"></div>
 
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <a href="/index.html" class="logo">
-      <span class="logo-text">Dragon<span>VPN</span></span>
+    <a href="/index.html" class="logo" aria-label="PEAK VPN — на главную">
+      <span class="logo-text">PEAK <span>VPN</span></span>
     </a>
     <div class="nav-actions">
       <a href="/index.html" class="nav-link">На главную</a>
@@ -39,9 +40,9 @@
     <a href="/index.html" class="nav-mobile-link">На главную</a>
     <button class="nav-mobile-buy logout-btn" type="button">Выйти</button>
     <div class="nav-mobile-divider"></div>
-    <a href="https://t.me/DragonPNBot" class="nav-mobile-link">Политика</a>
-    <a href="https://t.me/DragonPNBot" class="nav-mobile-link">Условия</a>
-    <a href="https://t.me/DragonVPNSupport" class="nav-mobile-link">Поддержка</a>
+    <a href="https://t.me/PeakPNBot" class="nav-mobile-link">Политика конфиденциальности</a>
+    <a href="https://t.me/PeakPNBot" class="nav-mobile-link">Условия использования</a>
+    <a href="https://t.me/PeakVPNSupport" class="nav-mobile-link">Поддержка</a>
   </div>
 </nav>
 
@@ -51,9 +52,11 @@
     <!-- Шапка -->
     <div class="dash-header">
       <div>
+        <p class="kicker">Личный кабинет</p>
         <h1 class="dash-hello">Приветствую тебя<span>!</span></h1>
         <p class="dash-email"><span class="skel" id="user-phone" style="--skel-w:150px">—</span></p>
       </div>
+      <span class="dash-tag">PEAK · CONTROL</span>
     </div>
 
     <p class="payment-sync-note" id="payment-sync-banner" style="display:none">
@@ -90,7 +93,7 @@
       <section class="card span-2">
         <h2 class="card-title">Управление подпиской</h2>
         <div class="actions-row">
-          <a href="/index.html#pricing" class="btn-red" id="manage-primary-btn">Продлить</a>
+          <a href="/index.html#pricing" class="btn-primary" id="manage-primary-btn">Продлить</a>
           <a href="/index.html#pricing" class="btn-ghost" id="manage-secondary-btn">Сменить тариф</a>
         </div>
       </section>
@@ -127,23 +130,23 @@
 
         <div class="device-grid" id="platform-switch">
           <button type="button" class="device-card is-active" data-platform="ios">
-            <span class="device-icon">🍏</span>
+            <span class="device-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10.5 5h3"/></svg></span>
             <span class="device-name">iOS</span>
           </button>
           <button type="button" class="device-card" data-platform="android">
-            <span class="device-icon">🤖</span>
+            <span class="device-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="2" width="13" height="20" rx="2"/><path d="M5.5 18h13"/><circle cx="12" cy="20" r=".6" fill="currentColor"/></svg></span>
             <span class="device-name">Android</span>
           </button>
           <button type="button" class="device-card" data-platform="windows">
-            <span class="device-icon">🖥️</span>
+            <span class="device-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3.5" width="19" height="13" rx="1.5"/><path d="M8.5 20.5h7M12 16.5v4"/></svg></span>
             <span class="device-name">Windows</span>
           </button>
           <button type="button" class="device-card" data-platform="macos">
-            <span class="device-icon">💻</span>
+            <span class="device-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16V6a1.5 1.5 0 0 1 1.5-1.5h12A1.5 1.5 0 0 1 19.5 6v10"/><path d="M2 16h20l-1 3H3z"/></svg></span>
             <span class="device-name">macOS</span>
           </button>
           <button type="button" class="device-card" data-platform="androidtv">
-            <span class="device-icon">📺</span>
+            <span class="device-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="19" height="13" rx="1.5"/><path d="M8 2.5l4 4 4-4M8 22h8"/></svg></span>
             <span class="device-name">TV</span>
           </button>
         </div>
@@ -376,6 +379,19 @@
     </div>
   </div>
 </main>
+
+<footer class="foot-compact">
+  <div class="foot-inner">
+    <div class="foot-bottom">
+      <p class="foot-copy">© PEAK · Быстрее, даже в горах</p>
+      <ul class="foot-mini-links">
+        <li><a href="https://t.me/PeakVPNSupport">Поддержка</a></li>
+        <li><a href="https://t.me/PeakPNBot">Политика конфиденциальности</a></li>
+        <li><a href="https://t.me/PeakPNBot">Условия использования</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
 
 <script src="/js/nav.js"></script>
 <script src="/js/dashboard.js"></script>

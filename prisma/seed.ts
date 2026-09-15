@@ -7,10 +7,10 @@ const adapter = new PrismaPg(process.env.DATABASE_URL!)
 const prisma = new PrismaClient({ adapter })
 
 const PLANS = [
-  { code: "1m", name: "1 месяц", badge: null, months: 1, days: 0, priceRub: 119, sortOrder: 1 },
-  { code: "3m", name: "3 месяца", badge: "Выгода ≈5%", months: 3, days: 0, priceRub: 349, sortOrder: 2 },
-  { code: "6m", name: "6 месяцев", badge: "✦ Популярное", months: 6, days: 0, priceRub: 699, sortOrder: 3 },
-  { code: "12m", name: "12 месяцев", badge: "★ Лучшая цена", months: 12, days: 0, priceRub: 1399, sortOrder: 4 },
+  { code: "1m", name: "1 месяц", badge: null, months: 1, days: 0, priceRub: 109, sortOrder: 1 },
+  { code: "3m", name: "3 месяца", badge: "🔥 Скидка −5%", months: 3, days: 0, priceRub: 309, sortOrder: 2 },
+  { code: "6m", name: "6 месяцев", badge: "⚡️ Скидка −8%", months: 6, days: 0, priceRub: 599, sortOrder: 3 },
+  { code: "12m", name: "12 месяцев", badge: "🏔 Скидка −16%", months: 12, days: 0, priceRub: 1099, sortOrder: 4 },
 ]
 
 async function main() {

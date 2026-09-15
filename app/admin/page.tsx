@@ -2,8 +2,8 @@ import { prisma } from "@/lib/prisma"
 
 function Card({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-gradient-to-br from-[#150d0e] to-[#0d0708] p-5">
-      <p className="text-[11px] uppercase tracking-widest text-[#8f7c7a]">{label}</p>
+    <div className="rounded-xl border border-white/10 bg-gradient-to-br from-[#141414] to-[#080808] p-5">
+      <p className="text-[11px] uppercase tracking-widest text-[#a0a0a0]">{label}</p>
       <p className="mt-2 text-2xl font-bold text-white">{value}</p>
     </div>
   )

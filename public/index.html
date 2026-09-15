@@ -2,99 +2,219 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dragon VPN | Главная</title>
-<meta name="description" content="Быстрый VPN без компромиссов. Никаких логов, никаких ограничений — просто работает.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PEAK — Премиальный VPN</title>
+<meta name="description" content="PEAK — быстрый и стабильный VPN с безопасным подключением, приватностью и доступом без лишних ограничений.">
+<meta name="theme-color" content="#050505">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="PEAK">
+<meta property="og:title" content="PEAK — Премиальный VPN">
+<meta property="og:description" content="PEAK — быстрый и стабильный VPN с безопасным подключением, приватностью и доступом без лишних ограничений.">
+<meta property="og:image" content="/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="PEAK — Быстрее, даже в горах">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PEAK — Премиальный VPN">
+<meta name="twitter:description" content="PEAK — быстрый и стабильный VPN с безопасным подключением, приватностью и доступом без лишних ограничений.">
+<meta name="twitter:image" content="/og-image.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"PEAK","slogan":"Быстрее, даже в горах","description":"PEAK — быстрый и стабильный VPN с безопасным подключением, приватностью и доступом без лишних ограничений.","logo":"/icon-512.png"}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&family=Great+Vibes&family=Space+Grotesk:wght@500;700&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css">
-<link rel="icon" type="image/png" href="/icon-dark-32x32.png">
+<link rel="preload" as="image" href="/img/peak-logo.webp" type="image/webp">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-dark-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
 <link rel="apple-touch-icon" href="/apple-icon.png">
 </head>
 <body>
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
+<div class="bg-topo" aria-hidden="true"></div>
 
 <nav>
   <div class="nav-inner">
-    <a href="/index.html" class="logo">
-      <span class="logo-text">Dragon<span>VPN</span></span>
+    <a href="/index.html" class="logo" aria-label="PEAK VPN — на главную">
+      <span class="logo-text">PEAK <span>VPN</span></span>
     </a>
+    <ul class="nav-links">
+      <li><a href="#how">Как это работает</a></li>
+      <li><a href="#antijam">Возможности</a></li>
+      <li><a href="#pricing">Тарифы</a></li>
+      <li><a href="#reviews">Отзывы</a></li>
+    </ul>
     <div class="nav-actions">
       <a href="/login.html" class="nav-link auth-nav-link">Войти</a>
-      <a href="#pricing" class="nav-buy">Купить VPN</a>
+      <a href="#pricing" class="nav-buy">Купить доступ</a>
     </div>
     <button class="nav-burger" id="nav-burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-mobile-menu">
       <span></span><span></span><span></span>
     </button>
   </div>
   <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <a href="#how" class="nav-mobile-link">Как это работает</a>
+    <a href="#antijam" class="nav-mobile-link">Возможности</a>
+    <a href="#pricing" class="nav-mobile-link">Тарифы</a>
+    <a href="#reviews" class="nav-mobile-link">Отзывы</a>
     <a href="/login.html" class="nav-mobile-link auth-nav-link">Войти</a>
-    <a href="#pricing" class="nav-mobile-buy">Купить VPN</a>
+    <a href="#pricing" class="nav-mobile-buy">Купить доступ</a>
     <div class="nav-mobile-divider"></div>
-    <a href="https://t.me/DragonPNBot" class="nav-mobile-link">Политика</a>
-    <a href="https://t.me/DragonPNBot" class="nav-mobile-link">Условия</a>
-    <a href="https://t.me/DragonVPNSupport" class="nav-mobile-link">Поддержка</a>
+    <a href="https://t.me/PeakPNBot" class="nav-mobile-link">Политика конфиденциальности</a>
+    <a href="https://t.me/PeakPNBot" class="nav-mobile-link">Условия использования</a>
+    <a href="https://t.me/PeakVPNSupport" class="nav-mobile-link">Поддержка</a>
   </div>
 </nav>
 
+<main>
 <section class="hero">
   <div class="wrap hero-inner">
     <div class="hero-content">
-      <p class="hero-tag">Надежность. Безопасность. Свобода.</p>
-      <h1 class="hero-title">Скорость с <span>характером</span></h1>
-      <p class="hero-sub">Быстрый VPN для стабильности доступа к интернету даже на улице. Подключайтесь за секунды, пользуйтесь любимыми сервисами и оставайтесь онлайн даже при заглушках сети LTE/3G.</p>
-      <div class="hero-cta">
-        <a href="#pricing" class="btn-red">Подключиться →</a>
-        <span class="hero-note">От 115 ₽/мес</span>
+      <p class="hero-brand" data-reveal><strong>PEAK</strong><i></i>VPN, который может</p>
+      <h1 class="hero-title" data-reveal style="--reveal-delay:.08s">VPN на новом <span>уровне.</span></h1>
+      <p class="hero-slogan" data-reveal style="--reveal-delay:.16s">Быстрее, даже в горах</p>
+      <p class="hero-sub" data-reveal style="--reveal-delay:.22s">Быстрое и стабильное соединение без лишних ограничений.</p>
+      <div class="hero-cta" data-reveal style="--reveal-delay:.3s">
+        <a href="#pricing" class="btn-primary">Купить доступ</a>
+        <a href="#how" class="btn-outline">Как это работает
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </a>
+      </div>
+      <div class="hero-meta" data-reveal style="--reveal-delay:.38s">
+        <span>Скорость</span><span>Безопасность</span><span>Приватность</span><span>Без ограничений</span>
       </div>
     </div>
-    <div class="hero-visual">
-      <img src="/dragonvpn_logo.png" alt="Эмблема Dragon VPN" class="hero-emblem" width="960" height="960" fetchpriority="high" decoding="async">
+    <div class="hero-visual" aria-hidden="true">
+      <img src="/img/hero-contours.svg" alt="" class="hero-contours" width="600" height="600">
+      <div class="hero-frame"><i></i><i></i><i></i><i></i></div>
+      <span class="hero-coord tl">ALT ↑ MAX</span>
+      <span class="hero-coord br">PEAK / 01</span>
+      <picture>
+        <source srcset="/img/peak-logo.webp" type="image/webp">
+        <img src="/img/peak-logo.png" alt="" class="hero-emblem" width="720" height="720" fetchpriority="high" decoding="async">
+      </picture>
     </div>
   </div>
 </section>
 
 <!-- STATS -->
 <div class="wrap">
-  <div class="stats">
+  <div class="stats" data-reveal>
     <div class="stat">
-      <p class="stat-n">4</p>
+      <p class="stat-n">3</p>
       <p class="stat-l">Доступных сервера</p>
     </div>
     <div class="stat">
-      <p class="stat-n">700<span>+</span></p>
+      <p class="stat-n">100<span>+</span></p>
       <p class="stat-l">Пользователей</p>
+    </div>
+    <div class="stat">
+      <p class="stat-n"><small>от</small>109<span> ₽</span></p>
+      <p class="stat-l">Стоимость в месяц</p>
     </div>
   </div>
 </div>
 
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Скорость</span><span>Безопасность</span><span>Приватность</span><span>Без ограничений</span>
+    <span>Скорость</span><span>Безопасность</span><span>Приватность</span><span>Без ограничений</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="kicker">Как это работает</p>
+        <h2 class="section-title">Три шага до <span>вершины</span></h2>
+      </div>
+      <p class="section-sub">Подключение занимает пару минут — без настроек и сложных инструкций.</p>
+    </div>
+    <div class="how-grid" data-reveal>
+      <div class="how-step">
+        <p class="how-num">01</p>
+        <svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M2.5 10h19M6.5 15h4"/></svg>
+        <h3 class="how-title">Выберите тариф</h3>
+        <p class="how-desc">Оформите подписку на удобный срок и оплатите онлайн.</p>
+      </div>
+      <div class="how-step">
+        <p class="how-num">02</p>
+        <svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        <h3 class="how-title">Установите приложение</h3>
+        <p class="how-desc">iOS, Android, Windows, macOS и TV — инструкция в личном кабинете.</p>
+      </div>
+      <div class="how-step">
+        <p class="how-num">03</p>
+        <svg class="how-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20 10 8l4 6 2-3 5 9z"/><path d="M10 8l1.5 3"/></svg>
+        <h3 class="how-title">Подключитесь</h3>
+        <p class="how-desc">Добавьте подписку в одно касание и включите VPN.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ANTIJAM -->
 <section class="antijam" id="antijam">
   <div class="wrap">
-    <div class="antijam-inner">
+    <div class="antijam-inner" data-reveal>
       <div class="antijam-text">
-        <p class="antijam-label">Антизаглушка</p>
-        <h2 class="antijam-title">Обход заглушек LTE/3G</h2>
-        <p class="antijam-body">Dragon VPN помогает обходить заглушки и ограничения мобильного интернета. Подключайтесь к нужным сервисам, когда обычное соединение начинает работать нестабильно.</p>
+        <p class="kicker">Без ограничений</p>
+        <h2 class="antijam-title">Обход заглушек <span>LTE/3G</span></h2>
+        <p class="antijam-body">PEAK помогает обходить заглушки и ограничения мобильного интернета. Подключайтесь к нужным сервисам, когда обычное соединение начинает работать нестабильно.</p>
         <div class="antijam-features">
           <div class="antijam-feature">
+            <svg class="antijam-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r=".8" fill="currentColor"/><path d="M1.5 9a15 15 0 0 1 21 0"/></svg>
             <p class="antijam-feature-title">Работает на улице при глушилках</p>
             <p class="antijam-feature-desc">Стабильное подключение даже при использовании мобильного интернета.</p>
           </div>
           <div class="antijam-feature">
+            <svg class="antijam-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h2v-4H4zM9 20h2v-8H9zM14 20h2V8h-2zM19 20h2V4h-2z"/></svg>
             <p class="antijam-feature-title">На любых мобильных операторах</p>
             <p class="antijam-feature-desc">МТС, Билайн, Мегафон, Tele2 и другие.</p>
           </div>
           <div class="antijam-feature">
+            <svg class="antijam-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
             <p class="antijam-feature-title">В любом городе России</p>
             <p class="antijam-feature-desc">Можно использовать в любой точке России, а часто — и за её пределами.</p>
           </div>
         </div>
       </div>
-      <img src="/dragon-lte.png" alt="Дракон Dragon VPN рядом с вышкой LTE — символ обхода заглушек мобильного интернета" class="antijam-visual" width="700" height="700" loading="lazy" decoding="async">
+      <svg class="antijam-visual" viewBox="0 0 320 320" fill="none" role="img" aria-label="Горная вершина с сигналом связи — символ стабильного подключения PEAK">
+        <defs>
+          <linearGradient id="aj-gold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#F5D98A"/><stop offset=".45" stop-color="#E6B84A"/><stop offset="1" stop-color="#A87A22"/>
+          </linearGradient>
+          <linearGradient id="aj-fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#D6A33A" stop-opacity=".16"/><stop offset="1" stop-color="#D6A33A" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <g stroke="#ffffff" stroke-opacity=".07">
+          <ellipse cx="160" cy="262" rx="150" ry="26"/>
+          <ellipse cx="160" cy="262" rx="112" ry="18"/>
+          <ellipse cx="160" cy="262" rx="74" ry="11"/>
+        </g>
+        <path d="M18 262 96 168l26 28 68-100 112 166z" fill="url(#aj-fade)"/>
+        <path d="M18 262 96 168l26 28 68-100 112 166" stroke="url(#aj-gold)" stroke-width="2" stroke-linejoin="round"/>
+        <g stroke="#E6B84A" stroke-opacity=".45" stroke-width="1.2" stroke-linejoin="round">
+          <path d="M190 96l-12 52 20 30-8 44"/>
+          <path d="M190 96l22 48-6 40 22 36"/>
+          <path d="M96 168l6 36-14 30"/>
+        </g>
+        <path d="M0 262h320" stroke="#ffffff" stroke-opacity=".14"/>
+        <path d="M190 96V58" stroke="url(#aj-gold)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="190" cy="56" r="3.5" fill="#F2C45F"/>
+        <g stroke="#F2C45F" stroke-width="2" stroke-linecap="round">
+          <path class="sig" d="M178.7 44.7a16 16 0 0 1 22.6 0"/>
+          <path class="sig" d="M168.8 34.8a30 30 0 0 1 42.4 0"/>
+          <path class="sig" d="M158.9 24.9a44 44 0 0 1 62.2 0"/>
+        </g>
+      </svg>
     </div>
   </div>
 </section>
@@ -102,7 +222,13 @@
 <!-- PRICING -->
 <section class="pricing" id="pricing">
   <div class="wrap">
-    <h2 class="section-title">Тарифы</h2>
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="kicker">Подписка</p>
+        <h2 class="section-title">Тарифы</h2>
+      </div>
+      <p class="section-sub">Один доступ — все серверы PEAK. Чем дольше срок, тем выгоднее.</p>
+    </div>
     <div class="plans-row" data-plans-auto>
       <!-- Заглушки на время загрузки /api/plans — столько же, сколько тарифов,
            чтобы блок не менял высоту, когда придут настоящие карточки. -->
@@ -117,11 +243,16 @@
 <!-- REVIEWS -->
 <section class="reviews" id="reviews">
   <div class="wrap">
-    <h2 class="section-title">Отзывы</h2>
+    <div class="section-head" data-reveal>
+      <div>
+        <p class="kicker">Отзывы</p>
+        <h2 class="section-title">Нам доверяют</h2>
+      </div>
+    </div>
     <div class="reviews-grid">
-      <div class="review">
+      <div class="review" data-reveal>
         <div class="review-stars" aria-hidden="true">★★★★★</div>
-        <span class="review-quote">“</span>
+        <span class="review-quote" aria-hidden="true">“</span>
         <p class="review-text">Пользуюсь уже пару месяцев, пока всё нравится. Обход заглушек работает быстро, на Билайне всё летает. Скорость норм, связь стабильная, без лишних проблем. Один из лучших VPN, которыми пользовался.</p>
         <div class="review-author">
           <div class="review-avatar">А</div>
@@ -131,9 +262,9 @@
           </div>
         </div>
       </div>
-      <div class="review">
+      <div class="review" data-reveal style="--reveal-delay:.08s">
         <div class="review-stars" aria-hidden="true">★★★★★</div>
-        <span class="review-quote">“</span>
+        <span class="review-quote" aria-hidden="true">“</span>
         <p class="review-text">Всё работает отлично. Обход заглушек реально выручает. Раньше на Мегафоне иногда были проблемы, сейчас всё нормально. Подключается быстро, скорость хорошая. Пользуюсь давно, пока всё устраивает.</p>
         <div class="review-author">
           <div class="review-avatar">М</div>
@@ -143,9 +274,9 @@
           </div>
         </div>
       </div>
-      <div class="review">
+      <div class="review" data-reveal>
         <div class="review-stars" aria-hidden="true">★★★★★</div>
-        <span class="review-quote">“</span>
+        <span class="review-quote" aria-hidden="true">“</span>
         <p class="review-text">Дал VPN друзьям и родным, в итоге все устройства быстро заняли 😄 Все довольны, поэтому взял себе ещё одну подписку. За свои деньги вообще отлично. Пользуюсь и не парюсь.</p>
         <div class="review-author">
           <div class="review-avatar">М</div>
@@ -155,9 +286,9 @@
           </div>
         </div>
       </div>
-      <div class="review">
+      <div class="review" data-reveal style="--reveal-delay:.08s">
         <div class="review-stars" aria-hidden="true">★★★★★</div>
-        <span class="review-quote">“</span>
+        <span class="review-quote" aria-hidden="true">“</span>
         <p class="review-text">Сначала VPN работал не всегда стабильно, но разработчики реально прислушались к отзывам и всё подтянули. Сейчас работает намного лучше — быстро и стабильно. Отдельно зашёл сервер «Нидерланды».</p>
         <div class="review-author">
           <div class="review-avatar">А</div>
@@ -174,28 +305,55 @@
 <!-- CTA -->
 <section class="cta-section">
   <div class="wrap">
-    <div class="cta-box">
+    <div class="cta-box" data-reveal>
+      <svg class="cta-ridge" viewBox="0 0 560 180" fill="none" aria-hidden="true">
+        <path d="M0 180 120 92l44 34 92-108 70 66 42-30 192 126" stroke="#D6A33A" stroke-opacity=".35" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M40 180 150 118l40 26 80-84 60 52 40-22 150 90" stroke="#ffffff" stroke-opacity=".08" stroke-linejoin="round"/>
+      </svg>
       <div class="cta-copy">
-        <span class="cta-hand">Бесплатный доступ в Telegram</span>
+        <p class="kicker">Бесплатный доступ в Telegram</p>
         <h2>Попробуйте бесплатно</h2>
         <p>Проверьте скорость и стабильность подключения перед покупкой подписки — чтобы решение о покупке было осознанным.</p>
       </div>
-      <a href="https://t.me/DragonPNBot" class="btn-red" target="_blank" rel="noopener">Получить 2 дня бесплатно →</a>
+      <a href="https://t.me/PeakPNBot" class="btn-primary" target="_blank" rel="noopener">Получить 2 дня бесплатно</a>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="foot-inner">
-    <a href="/index.html" class="foot-logo">
-      <span class="logo-text">Dragon<span>VPN</span></span>
-    </a>
-    <p class="foot-copy">© 2026 Dragon VPN</p>
-    <ul class="foot-links">
-      <li><a href="https://t.me/DragonPNBot">Политика</a></li>
-      <li><a href="https://t.me/DragonPNBot">Условия</a></li>
-      <li><a href="https://t.me/DragonVPNSupport">Поддержка</a></li>
-    </ul>
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="/index.html" class="logo foot-logo" aria-label="PEAK — на главную">
+          <img src="/img/peak-mark.png" alt="" class="logo-mark" width="30" height="30" loading="lazy">
+          <span class="logo-text">PEAK</span>
+        </a>
+        <p class="foot-desc">Премиальный VPN для быстрого, стабильного и приватного подключения — дома, в дороге и на мобильном интернете.</p>
+        <p class="foot-slogan">Быстрее, даже в горах</p>
+      </div>
+      <div>
+        <p class="foot-col-title">Навигация</p>
+        <ul class="foot-links">
+          <li><a href="#how">Как это работает</a></li>
+          <li><a href="#pricing">Тарифы</a></li>
+          <li><a href="#reviews">Отзывы</a></li>
+          <li><a href="/login.html" class="auth-nav-link">Войти</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="foot-col-title">Поддержка</p>
+        <ul class="foot-links">
+          <li><a href="https://t.me/PeakVPNSupport">Поддержка в Telegram</a></li>
+          <li><a href="https://t.me/PeakPNBot">Политика конфиденциальности</a></li>
+          <li><a href="https://t.me/PeakPNBot">Условия использования</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p class="foot-copy">© PEAK</p>
+      <p class="foot-tags">Скорость · Безопасность · Приватность</p>
+    </div>
   </div>
 </footer>
 

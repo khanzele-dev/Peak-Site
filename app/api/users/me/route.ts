@@ -2,12 +2,19 @@ import { NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/session"
 import { prisma } from "@/lib/prisma"
 import { getRemnawaveSubscription } from "@/lib/remnawave"
-import { jsonError } from "@/lib/http"
+import { jsonError, TOO_MANY_REQUESTS } from "@/lib/http"
 import { withErrorHandling } from "@/lib/apiHandler"
+import { isRateLimited } from "@/lib/rateLimit"
 
 export const GET = withErrorHandling(async () => {
   const user = await getCurrentUser()
   if (!user) return jsonError("Не авторизован", 401)
+
+  // Вызывается на каждой странице (nav.js) и ходит в панель — лимит по юзеру,
+  // чтобы через сайт нельзя было заспамить Remnawave запросами.
+  if (await isRateLimited(`me:user:${user.id}`, 60, 60 * 1000)) {
+    return jsonError(TOO_MANY_REQUESTS, 429)
+  }
 
   let subscription = null
   if (user.remnawaveUuid) {

@@ -2,8 +2,9 @@ import { NextResponse } from "next/server"
 import { getCurrentUser } from "@/lib/session"
 import { prisma } from "@/lib/prisma"
 import { reconcileYookassaPayment } from "@/lib/paymentFulfillment"
-import { jsonError } from "@/lib/http"
+import { jsonError, TOO_MANY_REQUESTS } from "@/lib/http"
 import { withErrorHandling } from "@/lib/apiHandler"
+import { isRateLimited } from "@/lib/rateLimit"
 
 /**
  * Вызывается фронтендом при возврате на /dashboard.html?payment=pending —
@@ -20,6 +21,12 @@ import { withErrorHandling } from "@/lib/apiHandler"
 export const POST = withErrorHandling(async () => {
   const user = await getCurrentUser()
   if (!user) return jsonError("Не авторизован", 401)
+
+  // Каждая сверка ходит в ЮKassa и Remnawave. Фронтенд делает до 6 попыток
+  // за один возврат с оплаты — лимит с запасом на это, но не на спам.
+  if (await isRateLimited(`sync:user:${user.id}`, 30, 60 * 1000)) {
+    return jsonError(TOO_MANY_REQUESTS, 429)
+  }
 
   const unresolved = await prisma.payment.findMany({
     where: {

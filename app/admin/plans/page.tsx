@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma"
 import { togglePlanActive, createPlan, updatePlan, deletePlan } from "./actions"
 
 const inputClass =
-  "w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#e0362a]"
+  "w-full rounded-md border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-[#d6a33a]"
 
 export default async function AdminPlansPage() {
   const plans = await prisma.plan.findMany({ orderBy: { sortOrder: "asc" } })
@@ -10,14 +10,14 @@ export default async function AdminPlansPage() {
   return (
     <div>
       <h1 className="mb-6 text-xl font-bold text-white">Тарифы</h1>
-      <p className="mb-4 text-xs text-[#8f7c7a]">
+      <p className="mb-4 text-xs text-[#a0a0a0]">
         Изменения здесь сразу видны на главной странице и в личном кабинете — они всегда берут список тарифов
         из /api/plans. Скрытый тариф пропадает с сайта, но остаётся в базе (историю платежей по нему не теряем).
       </p>
       <div className="overflow-x-auto rounded-xl border border-white/10">
         <table className="w-full min-w-[880px] text-left text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-[11px] uppercase tracking-widest text-[#8f7c7a]">
+            <tr className="border-b border-white/10 text-[11px] uppercase tracking-widest text-[#a0a0a0]">
               <th className="px-3 py-3">Код</th>
               <th className="px-3 py-3">Название</th>
               <th className="px-3 py-3">Бейдж (опц.)</th>
@@ -34,7 +34,7 @@ export default async function AdminPlansPage() {
               const formId = `plan-form-${plan.id}`
               return (
                 <tr key={plan.id} className="border-b border-white/5 align-top last:border-none">
-                  <td className="px-3 py-3 text-[#8f7c7a]">
+                  <td className="px-3 py-3 text-[#a0a0a0]">
                     {plan.code}
                     {/* Форма без визуального тела — инпуты в других ячейках привязаны к ней через form={formId} */}
                     <form id={formId} action={updatePlan.bind(null, plan.id)} />
@@ -91,20 +91,20 @@ export default async function AdminPlansPage() {
                       className={`${inputClass} w-16`}
                     />
                   </td>
-                  <td className="px-3 py-3 text-[#8f7c7a]">{plan.isActive ? "Активен" : "Скрыт"}</td>
+                  <td className="px-3 py-3 text-[#a0a0a0]">{plan.isActive ? "Активен" : "Скрыт"}</td>
                   <td className="px-3 py-3">
                     <div className="flex flex-col items-end gap-1.5">
                       <button
                         type="submit"
                         form={formId}
-                        className="w-full rounded-md bg-[#e0362a] px-3 py-1.5 text-xs font-medium text-white transition hover:opacity-90"
+                        className="w-full rounded-md bg-[#d6a33a] px-3 py-1.5 text-xs font-semibold text-[#050505] transition hover:opacity-90"
                       >
                         Сохранить
                       </button>
                       <form action={togglePlanActive.bind(null, plan.id)} className="w-full">
                         <button
                           type="submit"
-                          className="w-full rounded-md border border-[#e0362a]/40 px-3 py-1.5 text-xs font-medium text-[#e8e0e0] transition hover:bg-[#e0362a] hover:text-white"
+                          className="w-full rounded-md border border-[#d6a33a]/40 px-3 py-1.5 text-xs font-medium text-[#e8e8e8] transition hover:bg-[#d6a33a] hover:text-[#050505]"
                         >
                           {plan.isActive ? "Скрыть" : "Показать"}
                         </button>
@@ -112,7 +112,7 @@ export default async function AdminPlansPage() {
                       <form action={deletePlan.bind(null, plan.id)} className="w-full">
                         <button
                           type="submit"
-                          className="w-full rounded-md border border-white/10 px-3 py-1.5 text-xs font-medium text-[#8f7c7a] transition hover:border-red-500/40 hover:text-red-400"
+                          className="w-full rounded-md border border-white/10 px-3 py-1.5 text-xs font-medium text-[#a0a0a0] transition hover:border-red-500/40 hover:text-red-400"
                         >
                           Удалить
                         </button>
@@ -124,56 +124,56 @@ export default async function AdminPlansPage() {
             })}
             {plans.length === 0 && (
               <tr>
-                <td colSpan={9} className="px-4 py-6 text-center text-[#8f7c7a]">Тарифов пока нет</td>
+                <td colSpan={9} className="px-4 py-6 text-center text-[#a0a0a0]">Тарифов пока нет</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
 
-      <h2 className="mb-4 mt-10 text-sm font-semibold uppercase tracking-widest text-[#8f7c7a]">Новый тариф</h2>
+      <h2 className="mb-4 mt-10 text-sm font-semibold uppercase tracking-widest text-[#a0a0a0]">Новый тариф</h2>
       <form
         action={createPlan}
-        className="grid max-w-3xl grid-cols-2 gap-4 rounded-xl border border-white/10 bg-gradient-to-br from-[#150d0e] to-[#0d0708] p-5 sm:grid-cols-3"
+        className="grid max-w-3xl grid-cols-2 gap-4 rounded-xl border border-white/10 bg-gradient-to-br from-[#141414] to-[#080808] p-5 sm:grid-cols-3"
       >
         <label className="col-span-2 flex flex-col gap-1.5 sm:col-span-1">
-          <span className="text-xs text-[#8f7c7a]">Код (уникальный)</span>
+          <span className="text-xs text-[#a0a0a0]">Код (уникальный)</span>
           <input name="code" required placeholder="test5d" className={inputClass} />
         </label>
         <label className="col-span-2 flex flex-col gap-1.5 sm:col-span-1">
-          <span className="text-xs text-[#8f7c7a]">Название</span>
+          <span className="text-xs text-[#a0a0a0]">Название</span>
           <input name="name" required placeholder="Тест (+5 дней)" className={inputClass} />
         </label>
         <label className="col-span-2 flex flex-col gap-1.5 sm:col-span-1">
-          <span className="text-xs text-[#8f7c7a]">Бейдж (необязательно)</span>
+          <span className="text-xs text-[#a0a0a0]">Бейдж (необязательно)</span>
           <input name="badge" placeholder="Популярное" className={inputClass} />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-xs text-[#8f7c7a]">Месяцев</span>
+          <span className="text-xs text-[#a0a0a0]">Месяцев</span>
           <input name="months" type="number" min={0} defaultValue={0} className={inputClass} />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-xs text-[#8f7c7a]">Дней</span>
+          <span className="text-xs text-[#a0a0a0]">Дней</span>
           <input name="days" type="number" min={0} defaultValue={0} className={inputClass} />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-xs text-[#8f7c7a]">Цена, ₽</span>
+          <span className="text-xs text-[#a0a0a0]">Цена, ₽</span>
           <input name="priceRub" type="number" min={1} required className={inputClass} />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="text-xs text-[#8f7c7a]">Порядок сортировки</span>
+          <span className="text-xs text-[#a0a0a0]">Порядок сортировки</span>
           <input name="sortOrder" type="number" defaultValue={99} className={inputClass} />
         </label>
         <div className="col-span-2 flex items-end sm:col-span-3">
           <button
             type="submit"
-            className="rounded-md bg-[#e0362a] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
+            className="rounded-md bg-[#d6a33a] px-4 py-2 text-sm font-semibold text-[#050505] transition hover:opacity-90"
           >
             Создать тариф
           </button>
         </div>
       </form>
-      <p className="mt-4 text-xs text-[#8f7c7a]">
+      <p className="mt-4 text-xs text-[#a0a0a0]">
         Бейдж — необязательная метка на карточке тарифа (например «Популярное», «Выгода ≈5%»). Если заполнен,
         карточка на сайте выделяется. Если оставить пустым — тариф отображается обычной карточкой без метки.
       </p>

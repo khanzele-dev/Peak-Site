@@ -10,17 +10,14 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Dragon VPN | Админ-панель',
-  description: 'Панель управления Dragon VPN.',
+  title: 'PEAK — Админ-панель',
+  description: 'Панель управления PEAK.',
+  robots: { index: false, follow: false },
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
         url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
+        sizes: '32x32',
       },
       {
         url: '/icon.svg',
@@ -34,11 +31,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: 'dark',
+  themeColor: '#050505',
 }
 
 export default function RootLayout({

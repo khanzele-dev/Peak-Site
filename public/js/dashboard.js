@@ -174,7 +174,7 @@ function renderQR(containerId, url) {
       text: url,
       width: 134,
       height: 134,
-      colorDark: "#0a0608",
+      colorDark: "#050505",
       colorLight: "#ffffff",
     });
   } else {

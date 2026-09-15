@@ -39,7 +39,7 @@ export async function reconcileYookassaPayment(providerPaymentId: string) {
     let remnawaveUuid = user.remnawaveUuid
     if (!remnawaveUuid) {
       const created = await ensureRemnawaveUser({ externalId: user.id, phone: user.phone })
-      remnawaveUuid = created.uuid
+      remnawaveUuid = created.id
       await prisma.user.update({ where: { id: user.id }, data: { remnawaveUuid } })
     }
     await extendRemnawaveSubscription(remnawaveUuid, { months: payment.plan.months, days: payment.plan.days })

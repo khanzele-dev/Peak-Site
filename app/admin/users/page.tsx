@@ -13,7 +13,7 @@ export default async function AdminUsersPage() {
       <div className="overflow-x-auto rounded-xl border border-white/10">
         <table className="w-full min-w-[560px] text-left text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-[11px] uppercase tracking-widest text-[#8f7c7a]">
+            <tr className="border-b border-white/10 text-[11px] uppercase tracking-widest text-[#a0a0a0]">
               <th className="px-4 py-3">Телефон</th>
               <th className="px-4 py-3">Роль</th>
               <th className="px-4 py-3">VPN выдан</th>
@@ -26,12 +26,12 @@ export default async function AdminUsersPage() {
                 <td className="px-4 py-3 text-white">{u.phone}</td>
                 <td className="px-4 py-3">{u.role === "ADMIN" ? "Админ" : "Пользователь"}</td>
                 <td className="px-4 py-3">{u.remnawaveUuid ? "Да" : "—"}</td>
-                <td className="px-4 py-3 text-[#8f7c7a]">{u.createdAt.toLocaleDateString("ru-RU")}</td>
+                <td className="px-4 py-3 text-[#a0a0a0]">{u.createdAt.toLocaleDateString("ru-RU")}</td>
               </tr>
             ))}
             {users.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-[#8f7c7a]">Пока нет пользователей</td>
+                <td colSpan={4} className="px-4 py-6 text-center text-[#a0a0a0]">Пока нет пользователей</td>
               </tr>
             )}
           </tbody>
