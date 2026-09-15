@@ -8,6 +8,8 @@
  *  - Все ответы обёрнуты в `{ "response": ... }`.
  *  - У пользователя нет поля `uuid` — он адресуется числовым `id`
  *    (GET /api/users/{id}); старые панели с uuid этим клиентом не поддерживаются.
+ *  - `shortUuid` — случайная часть ссылки подписки (sub.../<shortUuid>),
+ *    по ней пользователя можно найти: GET /api/users/by-short-uuid/{shortUuid}.
  *  - Отдельного эндпоинта подписки нет — все данные (status/expireAt/
  *    трафик/subscriptionUrl) лежат прямо на объекте пользователя.
  *  - Создание пользователя требует expireAt/trafficLimitBytes/
@@ -16,8 +18,8 @@
  *  - Продление — PATCH /api/users, `id` передаётся в теле, не в пути.
  *  - Ненайденный пользователь — 404 (errorCode A063).
  *
- * В БД сайта id панели хранится строкой в User.remnawaveUuid (имя поля
- * историческое, схему не трогаем).
+ * В БД сайта id панели хранится строкой (User.remnawaveUuid — имя поля
+ * историческое, Payment.remnawaveUserId).
  */
 
 const BASE_URL = process.env.REMNAWAVE_API_URL
@@ -58,10 +60,13 @@ async function rw<T>(path: string, init?: RequestInit): Promise<T> {
   return json.response as T
 }
 
-type RemnawaveUser = {
+export type RemnawaveStatus = "ACTIVE" | "DISABLED" | "LIMITED" | "EXPIRED"
+
+export type RemnawaveUser = {
   id: number
+  shortUuid: string
   username: string
-  status: "ACTIVE" | "DISABLED" | "LIMITED" | "EXPIRED"
+  status: RemnawaveStatus
   expireAt: string
   trafficLimitBytes: number
   subscriptionUrl: string
@@ -69,7 +74,7 @@ type RemnawaveUser = {
 }
 
 export type RemnawaveSubscription = {
-  status: "ACTIVE" | "DISABLED" | "LIMITED" | "EXPIRED"
+  status: RemnawaveStatus
   expireAt: string
   trafficLimitBytes: number
   trafficUsedBytes: number
@@ -82,7 +87,7 @@ export type RemnawaveNode = {
   status: "online" | "offline"
 }
 
-function toSubscription(user: RemnawaveUser): RemnawaveSubscription {
+export function toSubscription(user: RemnawaveUser): RemnawaveSubscription {
   return {
     status: user.status,
     expireAt: user.expireAt,
@@ -102,31 +107,34 @@ function toPanelId(storedId: string): number {
   return id
 }
 
-// Remnawave принимает в username только [A-Za-z0-9_-]. Префикс "site_" —
-// чтобы в общем списке панели было сразу видно источник, а по цифрам телефона
-// пользователя можно было найти поиском (телефон нормализован как +7XXXXXXXXXX,
-// см. lib/phone.ts).
-function buildRemnawaveUsername(phone: string): string {
+// Remnawave принимает в username только [A-Za-z0-9_-].
+// Аккаунт сайта: "site_<цифры телефона>" — видно источник, находится поиском по номеру.
+export function accountRemnawaveUsername(phone: string): string {
   return `site_${phone.replace(/\D/g, "")}`
 }
 
+// Покупка без регистрации: username выводится из id платежа (cuid, [a-z0-9]),
+// поэтому повторная попытка выдачи найдёт уже созданного пользователя.
+export function guestRemnawaveUsername(paymentId: string): string {
+  return `g_${paymentId}`
+}
+
 /**
- * Находит пользователя панели по username (site_<телефон>), либо создаёт нового.
+ * Находит пользователя панели по username, либо создаёт нового.
  * Поиск нужен для идемпотентности: если прошлая попытка выдачи создала
  * пользователя, но упала до сохранения id в БД, повторная не должна
  * упереться в занятый username.
  */
 export async function ensureRemnawaveUser(params: {
-  externalId: string
-  phone: string
+  username: string
+  description: string
 }): Promise<{ id: string }> {
   if (!SQUAD_UUID) {
     throw new Error("Remnawave squad is not configured (REMNAWAVE_SQUAD_UUID)")
   }
-  const username = buildRemnawaveUsername(params.phone)
 
   try {
-    const existing = await rw<RemnawaveUser>(`/api/users/by-username/${encodeURIComponent(username)}`)
+    const existing = await rw<RemnawaveUser>(`/api/users/by-username/${encodeURIComponent(params.username)}`)
     return { id: String(existing.id) }
   } catch (err) {
     if (!(err instanceof RemnawaveNotFoundError)) throw err
@@ -135,25 +143,35 @@ export async function ensureRemnawaveUser(params: {
   const created = await rw<RemnawaveUser>("/api/users", {
     method: "POST",
     body: JSON.stringify({
-      username,
+      username: params.username,
       // Новый пользователь стартует "истёкшим" — extendRemnawaveSubscription
       // сразу после этого вызова продлевает его на купленный срок.
       expireAt: new Date().toISOString(),
       trafficLimitBytes: DEFAULT_TRAFFIC_LIMIT_BYTES,
       trafficLimitStrategy: DEFAULT_TRAFFIC_STRATEGY,
       activeInternalSquads: [SQUAD_UUID],
-      // externalId (id пользователя в БД сайта) оставляем в описании — если
-      // username когда-нибудь разъедется с телефоном (смена номера и т.п.),
-      // по этому id всё равно можно найти запись в БД сайта для саппорта.
-      description: `PEAK (сайт) · ${params.phone} · site_id:${params.externalId}`,
+      description: params.description,
     }),
   })
   return { id: String(created.id) }
 }
 
+export async function getRemnawaveUser(storedId: string): Promise<RemnawaveUser> {
+  return rw<RemnawaveUser>(`/api/users/${toPanelId(storedId)}`)
+}
+
 export async function getRemnawaveSubscription(storedId: string): Promise<RemnawaveSubscription> {
-  const user = await rw<RemnawaveUser>(`/api/users/${toPanelId(storedId)}`)
-  return toSubscription(user)
+  return toSubscription(await getRemnawaveUser(storedId))
+}
+
+/** Пользователь по случайной части ссылки подписки; null — если такой нет. */
+export async function findRemnawaveUserByShortUuid(shortUuid: string): Promise<RemnawaveUser | null> {
+  try {
+    return await rw<RemnawaveUser>(`/api/users/by-short-uuid/${encodeURIComponent(shortUuid)}`)
+  } catch (err) {
+    if (err instanceof RemnawaveNotFoundError) return null
+    throw err
+  }
 }
 
 export type SubscriptionDuration = { months: number; days: number }

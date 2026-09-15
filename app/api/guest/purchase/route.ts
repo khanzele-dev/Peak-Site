@@ -1,19 +1,15 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { getCurrentUser } from "@/lib/session"
-import { jsonError, TOO_MANY_REQUESTS } from "@/lib/http"
+import { clientIp, jsonError, TOO_MANY_REQUESTS } from "@/lib/http"
 import { withErrorHandling } from "@/lib/apiHandler"
 import { isRateLimited } from "@/lib/rateLimit"
 import { checkoutErrorResponse, findActivePlan, startCheckout } from "@/lib/checkout"
 
 const bodySchema = z.object({ planId: z.string().max(64) })
 
+/** Покупка VPN без регистрации: создаёт платёж, пользователь панели появится после оплаты. */
 export const POST = withErrorHandling(async (req: NextRequest) => {
-  const user = await getCurrentUser()
-  if (!user) return jsonError("Не авторизован", 401)
-
-  // Каждый вызов создаёт платёж в ЮKassa и строку в БД — не даём это спамить.
-  if (await isRateLimited(`pay-create:user:${user.id}`, 10, 10 * 60 * 1000)) {
+  if (await isRateLimited(`guest-buy:ip:${clientIp(req)}`, 10, 10 * 60 * 1000)) {
     return jsonError(TOO_MANY_REQUESTS, 429)
   }
 
@@ -24,7 +20,7 @@ export const POST = withErrorHandling(async (req: NextRequest) => {
   if (!plan) return jsonError("Тариф не найден", 404)
 
   try {
-    const { confirmationUrl } = await startCheckout({ kind: "ACCOUNT", plan, userId: user.id })
+    const { confirmationUrl } = await startCheckout({ kind: "GUEST_NEW", plan })
     return NextResponse.json({ confirmationUrl })
   } catch (err) {
     return checkoutErrorResponse(err)

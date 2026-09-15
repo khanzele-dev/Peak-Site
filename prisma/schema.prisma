@@ -23,6 +23,15 @@ enum PaymentProvider {
   YOOKASSA
 }
 
+// ACCOUNT — оплата из личного кабинета (привязана к User).
+// GUEST_NEW — покупка без регистрации: пользователь панели создаётся после оплаты.
+// GUEST_RENEW — продление без регистрации по ссылке подписки.
+enum PaymentKind {
+  ACCOUNT
+  GUEST_NEW
+  GUEST_RENEW
+}
+
 // Пользователь сайта. Источник правды по VPN-подписке/трафику — Remnawave,
 // здесь храним только связь (remnawaveUuid) и то, что нужно для сайта.
 model User {
@@ -65,8 +74,16 @@ model Plan {
 // от повторной обработки одного и того же платежа вебхуком.
 model Payment {
   id                String          @id @default(cuid())
-  userId            String
-  user              User            @relation(fields: [userId], references: [id])
+  kind              PaymentKind     @default(ACCOUNT)
+  // null у платежей без регистрации (GUEST_NEW / GUEST_RENEW)
+  userId            String?
+  user              User?           @relation(fields: [userId], references: [id], onDelete: Restrict)
+  // id пользователя в панели Remnawave, которому выдан/продлён VPN по этому
+  // платежу. Для GUEST_RENEW известен сразу, для остальных — после выдачи.
+  remnawaveUserId   String?
+  // sha256 одноразового токена заказа без регистрации: токен приходит в
+  // return URL ЮKassa и даёт посмотреть результат именно этого заказа.
+  guestTokenHash    String?         @unique
   planId            String
   plan              Plan            @relation(fields: [planId], references: [id])
 

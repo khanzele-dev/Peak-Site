@@ -5,6 +5,12 @@ const STATUS_LABEL: Record<string, string> = {
   SUCCEEDED: "Оплачен",
   FAILED: "Ошибка",
   CANCELED: "Отменён",
+  REFUNDED: "Возврат",
+}
+
+const GUEST_LABEL: Record<string, string> = {
+  GUEST_NEW: "Без регистрации · покупка",
+  GUEST_RENEW: "Без регистрации · продление",
 }
 
 export default async function AdminPaymentsPage() {
@@ -22,7 +28,7 @@ export default async function AdminPaymentsPage() {
           <thead>
             <tr className="border-b border-white/10 text-[11px] uppercase tracking-widest text-[#a0a0a0]">
               <th className="px-4 py-3">Дата</th>
-              <th className="px-4 py-3">Телефон</th>
+              <th className="px-4 py-3">Покупатель</th>
               <th className="px-4 py-3">Тариф</th>
               <th className="px-4 py-3">Сумма</th>
               <th className="px-4 py-3">Статус</th>
@@ -33,7 +39,16 @@ export default async function AdminPaymentsPage() {
             {payments.map((p) => (
               <tr key={p.id} className="border-b border-white/5 last:border-none">
                 <td className="px-4 py-3 text-[#a0a0a0]">{p.createdAt.toLocaleDateString("ru-RU")}</td>
-                <td className="px-4 py-3 text-white">{p.user.phone}</td>
+                <td className="px-4 py-3">
+                  {p.user ? (
+                    <span className="text-white">{p.user.phone}</span>
+                  ) : (
+                    <span className="text-[#a0a0a0]">
+                      {GUEST_LABEL[p.kind] ?? "Без регистрации"}
+                      {p.remnawaveUserId && <span className="ml-1 text-[#666666]">· панель #{p.remnawaveUserId}</span>}
+                    </span>
+                  )}
+                </td>
                 <td className="px-4 py-3">{p.plan.name}</td>
                 <td className="px-4 py-3">{p.amountRub.toLocaleString("ru-RU")} ₽</td>
                 <td className="px-4 py-3">{STATUS_LABEL[p.status] ?? p.status}</td>

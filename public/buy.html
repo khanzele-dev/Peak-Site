@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Купить VPN без регистрации — PEAK</title>
+<meta name="description" content="Купите PEAK VPN без регистрации: выберите срок, оплатите и сразу получите ссылку на подписку.">
+<meta name="theme-color" content="#050505">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-dark-32x32.png">
+<link rel="apple-touch-icon" href="/apple-icon.png">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU" crossorigin="anonymous"></script>
+</head>
+<body data-guest-page="buy">
+
+<div class="bg-topo" aria-hidden="true"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/index.html" class="logo" aria-label="PEAK VPN — на главную">
+      <span class="logo-text">PEAK <span>VPN</span></span>
+    </a>
+    <div class="nav-actions">
+      <a href="/index.html" class="nav-link">На главную</a>
+      <a href="/renew.html" class="nav-link">Продлить VPN</a>
+      <a href="/login.html" class="nav-link auth-nav-link">Войти</a>
+    </div>
+    <button class="nav-burger" id="nav-burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav-mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="nav-mobile-menu" id="nav-mobile-menu">
+    <a href="/renew.html" class="nav-mobile-link">Продлить VPN</a>
+    <a href="/index.html" class="nav-mobile-link">На главную</a>
+    <a href="/login.html" class="nav-mobile-link auth-nav-link">Войти</a>
+    <div class="nav-mobile-divider"></div>
+    <a href="https://t.me/PeakPNBot" class="nav-mobile-link">Политика конфиденциальности</a>
+    <a href="https://t.me/PeakPNBot" class="nav-mobile-link">Условия использования</a>
+    <a href="https://t.me/PeakVPNSupport" class="nav-mobile-link">Поддержка</a>
+  </div>
+</nav>
+
+<main class="guest-page">
+  <div class="wrap">
+
+    <!-- Выбор тарифа -->
+    <section data-guest-intro>
+      <div class="section-head">
+        <div>
+          <p class="kicker">Без регистрации</p>
+          <h1 class="section-title">Купить <span>VPN</span></h1>
+        </div>
+        <p class="section-sub">Выберите срок и оплатите — ссылка на подписку появится сразу после оплаты. Аккаунт не нужен.</p>
+      </div>
+
+      <ol class="guest-steps">
+        <li><b>01</b>Выберите тариф</li>
+        <li><b>02</b>Оплатите онлайн</li>
+        <li><b>03</b>Получите ссылку и подключитесь</li>
+      </ol>
+
+      <p class="guest-notice" id="account-notice" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+        <span>Вы вошли в аккаунт. Чтобы подписка отображалась в личном кабинете, оформите её <a href="/dashboard.html">в кабинете</a>.</span>
+      </p>
+
+      <div class="plans-row" data-plans-auto data-plans-mode="guest-new">
+        <div class="plan plan-skeleton"><span class="skeleton skel-badge"></span><span class="skeleton skel-name"></span><span class="skeleton skel-price"></span><span class="skeleton skel-save"></span><span class="skeleton skel-btn"></span></div>
+        <div class="plan plan-skeleton"><span class="skeleton skel-badge"></span><span class="skeleton skel-name"></span><span class="skeleton skel-price"></span><span class="skeleton skel-save"></span><span class="skeleton skel-btn"></span></div>
+        <div class="plan plan-skeleton"><span class="skeleton skel-badge"></span><span class="skeleton skel-name"></span><span class="skeleton skel-price"></span><span class="skeleton skel-save"></span><span class="skeleton skel-btn"></span></div>
+        <div class="plan plan-skeleton"><span class="skeleton skel-badge"></span><span class="skeleton skel-name"></span><span class="skeleton skel-price"></span><span class="skeleton skel-save"></span><span class="skeleton skel-btn"></span></div>
+      </div>
+
+      <p class="guest-hint">Уже есть подписка? <a href="/renew.html">Продлите её по ссылке</a></p>
+    </section>
+
+    <!-- Результат заказа -->
+    <section class="guest-result" id="order-view" hidden aria-live="polite">
+
+      <div class="card guest-state" data-state="loading">
+        <span class="spinner guest-spinner" aria-hidden="true"></span>
+        <h1 class="guest-state-title" id="order-loading-title">Проверяем оплату…</h1>
+        <p class="guest-state-text" id="order-loading-text">Обычно это занимает несколько секунд. Не закрывайте страницу.</p>
+      </div>
+
+      <div class="card guest-state" data-state="pending" hidden>
+        <span class="guest-state-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <h1 class="guest-state-title">Ждём подтверждения оплаты</h1>
+        <p class="guest-state-text">Если вы уже оплатили, подтверждение обычно приходит в течение пары минут. Страницу можно обновить позже — заказ сохранится.</p>
+        <div class="actions-row"><button type="button" class="btn-primary" id="order-retry">Проверить ещё раз</button></div>
+      </div>
+
+      <div class="card guest-state" data-state="canceled" hidden>
+        <span class="guest-state-icon is-error" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></span>
+        <h1 class="guest-state-title">Оплата не прошла</h1>
+        <p class="guest-state-text">Платёж отменён, деньги не списаны. Можно выбрать тариф и попробовать ещё раз.</p>
+        <div class="actions-row"><a href="/buy.html" class="btn-primary">Выбрать тариф</a></div>
+      </div>
+
+      <div class="card guest-state" data-state="error" hidden>
+        <span class="guest-state-icon is-error" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg></span>
+        <h1 class="guest-state-title" id="order-error-title">Что-то пошло не так</h1>
+        <p class="guest-state-text" id="order-error-text">Попробуйте обновить страницу.</p>
+        <div class="actions-row">
+          <button type="button" class="btn-primary" id="order-error-retry">Попробовать снова</button>
+          <a href="https://t.me/PeakVPNSupport" class="btn-ghost">Поддержка</a>
+        </div>
+      </div>
+
+      <div data-state="success" id="order-success" hidden>
+        <div class="section-head">
+          <div>
+            <p class="kicker" id="success-kicker">Оплата прошла</p>
+            <h1 class="section-title" id="success-title">Подписка <span>активна</span></h1>
+          </div>
+          <p class="section-sub" id="success-sub"></p>
+        </div>
+
+        <div class="dash-grid guest-grid">
+          <section class="card span-2 guest-save">
+            <h2 class="card-title">Сохраните ссылку управления</h2>
+            <p class="guest-save-text">Аккаунта нет — по этой ссылке вы откроете подписку и продлите её. Сохраните её в заметках или закладках и не передавайте другим.</p>
+            <div class="sub-link-row">
+              <input class="sub-link-input" id="success-manage-url" data-sub="manage-url" readonly value="" aria-label="Ссылка управления подпиской">
+              <button class="btn-copy" type="button" data-copy-for="success-manage-url">Копировать</button>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2 class="card-title">Подписка <span class="badge active" data-sub="badge">Активна</span></h2>
+            <p class="sub-plan" data-sub="remaining">—</p>
+            <p class="sub-meta">Действует до: <strong data-sub="expire">—</strong></p>
+            <p class="sub-meta guest-meta-gap">Статус: <strong data-sub="status">—</strong></p>
+          </section>
+
+          <section class="card">
+            <h2 class="card-title">Трафик</h2>
+            <div class="traffic-top">
+              <span class="traffic-used" data-sub="used">—</span>
+              <span class="traffic-limit" data-sub="limit"></span>
+            </div>
+            <div class="progress"><div class="progress-bar" data-sub="bar"></div></div>
+            <p class="traffic-hint" data-sub="traffic-hint"></p>
+          </section>
+
+          <section class="card span-2">
+            <h2 class="card-title">Подключение</h2>
+            <p class="card-desc">Добавьте подписку в приложение одной кнопкой или скопируйте ссылку.</p>
+            <div class="actions-row">
+              <button type="button" class="btn-primary" data-app-scheme="happ">Добавить в Happ</button>
+              <button type="button" class="btn-ghost" data-app-scheme="v2raytun">Добавить в V2RayTun</button>
+            </div>
+            <div class="sub-link-row guest-sub-row">
+              <input class="sub-link-input" id="success-sub-url" data-sub="sub-url" readonly value="" aria-label="Ссылка на подписку">
+              <button class="btn-copy" type="button" data-copy-for="success-sub-url">Копировать</button>
+            </div>
+            <div class="qr-box">
+              <div class="qr-code" id="success-qr" data-sub-qr role="img" aria-label="QR-код для подключения к VPN"></div>
+              <p class="qr-hint">Отсканируйте QR-код в приложении на другом устройстве, чтобы импортировать подписку.</p>
+            </div>
+            <div class="guest-apps">
+              <p class="guest-apps-label">Нет приложения? Скачайте Happ</p>
+              <a class="btn-ghost" href="https://apps.apple.com/ru/app/happ-lite/id6799917773" target="_blank" rel="noopener">iOS</a>
+              <a class="btn-ghost" href="https://play.google.com/store/apps/details?id=com.happproxy" target="_blank" rel="noopener">Android</a>
+              <a class="btn-ghost" href="https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe">Windows</a>
+              <a class="btn-ghost" href="https://github.com/Happ-proxy/happ-desktop/releases/latest/download/Happ.macOS.universal.dmg">macOS</a>
+            </div>
+          </section>
+
+          <section class="card span-2">
+            <h2 class="card-title">Что дальше</h2>
+            <div class="actions-row">
+              <a href="/renew.html" class="btn-ghost" data-sub="renew-link">Управлять подпиской</a>
+              <a href="/index.html" class="btn-ghost">На главную</a>
+              <a href="https://t.me/PeakVPNSupport" class="btn-ghost">Поддержка</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="foot-compact">
+  <div class="foot-inner">
+    <div class="foot-bottom">
+      <p class="foot-copy">© PEAK · Быстрее, даже в горах</p>
+      <ul class="foot-mini-links">
+        <li><a href="https://t.me/PeakVPNSupport">Поддержка</a></li>
+        <li><a href="https://t.me/PeakPNBot">Политика конфиденциальности</a></li>
+        <li><a href="https://t.me/PeakPNBot">Условия использования</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/nav.js"></script>
+<script src="/js/subscription-utils.js"></script>
+<script src="/js/pricing.js"></script>
+<script src="/js/guest.js"></script>
+</body>
+</html>
